@@ -1,0 +1,12 @@
+{
+  "@metadata": {
+    "authors": [
+      "Chris Rishel"
+    ]
+  },
+  "userachievements-membershipyears-name": "Membership years",
+  "userachievements-membershipyears-desc": "Awarded based upon the number of years the user has been a member of the wiki",
+  "userachievements-membershipyears-0-name": "$level year member",
+  "userachievements-membershipyears-0-desc": "Be a member of the site for $level years",
+  "userachievements-membershipyears-1-desc": "Be a member of the site for 1 year"
+}

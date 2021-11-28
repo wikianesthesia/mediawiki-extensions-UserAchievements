@@ -1,0 +1,135 @@
+{
+  "$schema": "http://json-schema.org/schema#",
+  "description": "UserAchievements achievement.json schema. An achievement's achievement.json definition, along with all supporting files (internationalization messages, images, etc.) must be contained in a subdirectory of the \"achievements\" directory of the UserAchievements extension. The name of this subdirectory defines the case-sensitive id of the achievement. For consistency, many fields use the same names as the extension.json schema. However, only a limited subset of these fields are supported for achievements.",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "author": {
+      "type": [
+        "string",
+        "array"
+      ],
+      "description": "Achievement's authors.",
+      "items": {
+        "type": "string"
+      },
+      "default": ""
+    },
+    "version": {
+      "type": "string",
+      "description": "The version of this release of the achievement."
+    },
+    "name": {
+      "type": "string",
+      "description": "Raw display name of the achievement. If not specified, this will default to the achievement's id."
+    },
+    "namemsg": {
+      "type": "string",
+      "description": "i18n message key of the achievement's name. If not specified, will attempt to use the message key \"userachievements-ACHIEVEMENTID-name\". If a valid message is defined, this will take precedence over the value of \"name\"."
+    },
+    "description": {
+      "type": "string",
+      "description": "Raw description of the achievement."
+    },
+    "descriptionmsg": {
+      "type": "string",
+      "description": "i18n message key of the achievement's description. If not specified, will attempt to use the message key \"userachievements-ACHIEVEMENTID-desc\". If a valid message is defined, this will take precedence over the value of \"description\"."
+    },
+    "priority": {
+      "type": "integer",
+      "description": "The number of levels of the achievement which can be awarded.",
+      "default": 100
+    },
+    "secret": {
+      "type": "boolean",
+      "description": "Should the achievement be listed as available prior to being achieved.",
+      "default": false
+    },
+    "levels": {
+      "type": "integer",
+      "description": "The number of levels of the achievement which can be awarded.",
+      "default": 1
+    },
+    "color": {
+      "type": "string",
+      "description": "The primary color of the achievement."
+    },
+    "badges": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "namemsg": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "descriptionmsg": {
+            "type": "string"
+          },
+          "secret": {
+            "type": "boolean",
+            "description": "Should the badge be listed as available prior to being achieved.",
+            "default": false
+          },
+          "color": {
+            "type": "string",
+            "description": "The primary color of the badge."
+          },
+          "requiredStats": {
+            "type": "object",
+            "description": "The minimum required stats to automatically award the badge. The properties correspond to the ids of the stat with the minimum required value for the stat as values."
+          },
+          "media": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "image": {
+                "type": "string"
+              },
+              "thumbnail": {
+                "type": "string"
+              },
+              "icon": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "stats": {
+      "type": "object",
+      "description": "Defines the stats and default values used by this achievement, with the stat ids as properties and the default values as values.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "config": {
+      "type": "object",
+      "description": "Configuration options for this achievement. Unlike the extension.json definition of this field, this should be a simple object with the variable names as properties and default values as values. The configuration value name will be stored in $wgUserAchievementsAchievementsConfig[ $achievementId ].",
+      "items": {
+        "type": "string"
+      }
+    },
+    "Hooks": {
+      "type": "object",
+      "description": "MediaWiki hooks which should trigger an attempt to achieve the achievement for the user. This should be a simple object with the hook as properties and the callback function as values. For default behavior, set the value to \"tryAchieve\"",
+      "items": {
+        "type": "string"
+      }
+    },
+    "MessagesDirs": {
+      "type": "array",
+      "description": "Directory paths containing JSON internationalization data. Unlike the extension.json definition of this field, this should be a simple array of paths relative to the achievement's root.",
+      "items": {
+        "type": "string"
+      }
+    }
+  }
+}

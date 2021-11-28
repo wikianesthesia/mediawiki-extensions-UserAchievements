@@ -1,0 +1,47 @@
+{
+  "author": [
+    "Chris Rishel"
+  ],
+  "version": "1.0",
+  "priority": 90,
+  "levels": 5,
+  "color": "#f7e20a",
+  "badges": [
+    {
+      "requiredStats": {
+        "talkEdits": 1
+      }
+    }, {
+      "requiredStats": {
+        "talkEdits": 10
+      }
+    }, {
+      "requiredStats": {
+        "talkEdits": 100
+      }
+    }, {
+      "requiredStats": {
+        "talkEdits": 500
+      }
+    }, {
+      "requiredStats": {
+        "talkEdits": 1000
+      }
+    }
+  ],
+  "stats": {
+    "talkEdits": 0
+  },
+  "config": {
+    "IncludeDeletedRevisions": false,
+    "IncludeNamespaces": [],
+    "IncludeNullRevisions": true,
+    "IncludeRedirects": true
+  },
+  "Hooks": {
+    "PageSaveComplete": "tryAchieve"
+  },
+  "MessagesDirs": [
+    "i18n"
+  ]
+}

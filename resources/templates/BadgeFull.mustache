@@ -1,0 +1,16 @@
+<div class="card border-success userachievements-badgefull{{class}}" style="display: none;{{#achieved}} border-color: {{color}} !important;{{/achieved}}">
+    <a href="{{link}}">
+        <img class="card-img-top" src="{{image}}" alt="{{name}} image" title="{{description}}">
+    </a>
+    <div class="card-body">
+        <h5 class="card-title">
+            <a href="{{link}}">{{name}}</a>
+        </h5>
+        <p class="card-text">{{description}}</p>
+    </div>
+    {{#progress}}
+    <div class="card-footer">
+        <small class="text-muted">{{{progress}}}</small>
+    </div>
+    {{/progress}}
+</div>

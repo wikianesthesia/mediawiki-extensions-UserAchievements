@@ -1,0 +1,15 @@
+{
+  "author": [
+    "Chris Rishel"
+  ],
+  "version": "1.0",
+  "priority": 50,
+  "color": "#e1c9df",
+  "config": {
+    "RequireEmailConfirmation": true
+  },
+  "badges": [],
+  "MessagesDirs": [
+    "i18n"
+  ]
+}

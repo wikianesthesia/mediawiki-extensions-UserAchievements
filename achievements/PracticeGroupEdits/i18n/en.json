@@ -1,0 +1,15 @@
+{
+  "@metadata": {
+    "authors": [
+      "Chris Rishel"
+    ]
+  },
+  "userachievements-practicegroupedits-name": "Practice group edits",
+  "userachievements-practicegroupedits-desc": "Make edits to practice group articles on the wiki",
+  "userachievements-practicegroupedits-1-desc": "Make 10 edits to practice group articles",
+  "userachievements-practicegroupedits-2-desc": "Make 50 edits to practice group articles",
+  "userachievements-practicegroupedits-3-desc": "Make 250 edits to practice group articles",
+  "userachievements-practicegroupedits-4-desc": "Make 500 edits to practice group articles",
+  "userachievements-practicegroupedits-5-desc": "Make 1000 edits to practice group articles",
+  "userachievements-practicegroupedits-stat-practicegroupedits-name": "Practice group edits"
+}

@@ -1,0 +1,57 @@
+.userachievements-achievementseries {
+  @media (max-width: 767px) {
+    .card-deck {
+      display: flex;
+      flex-flow: row wrap;
+      justify-content: center;
+      margin-right: -15px;
+      margin-left: -15px;
+
+      .card {
+        margin-right: 5px;
+        margin-left: 5px;
+      }
+    }
+  }
+}
+
+.userachievements-badgefull {
+  display: flex !important;
+  max-width: 14rem;
+  width: 14rem;
+
+  img {
+    padding: 1rem;
+  }
+
+  @media (max-width: 767px) {
+    width: 10.25rem;
+  }
+}
+
+.userachievements-badgefull-notachieved {
+  border: 1px solid rgba(0,0,0,0.125) !important;
+
+  .card-img-top {
+    filter: grayscale(0.9);
+  }
+  .card-text {
+    filter: grayscale(1);
+  }
+}
+
+.userachievements-badgefull-achieved {
+  border-width: 3px !important;
+}
+
+.userachievements-badgethumbnail {
+  display: flex !important;
+  flex-direction: column;
+  text-align: center;
+  max-width: 6.25rem;
+  width: 6.25rem;
+
+  img {
+    max-width: 100px;
+  }
+}

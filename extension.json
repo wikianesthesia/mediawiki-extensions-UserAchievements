@@ -1,0 +1,118 @@
+{
+  "name": "UserAchievements",
+  "namemsg": "userachievements-extensionname",
+  "version": "0.1.0",
+  "author": [
+    "Chris Rishel"
+  ],
+  "license-name": "GPL-3.0-or-later",
+  "url": "https://www.mediawiki.org/wiki/Extension:UserAchievements",
+  "descriptionmsg": "userachievements-desc",
+  "type": "other",
+  "requires": {
+    "MediaWiki": ">= 1.35.0",
+    "extensions": {}
+  },
+  "callback": "MediaWiki\\Extension\\UserAchievements\\UserAchievements::initialize",
+  "config_prefix": "wg",
+  "config": {
+    "UserAchievementsAchievementsConfig": {
+      "value": []
+    },
+    "UserAchievementsDefaultAchievedColor": {
+      "value": "#28a745"
+    },
+    "UserAchievementsIgnoreUsernames": {
+      "value": []
+    },
+    "UserAchievementsUseRealName": {
+      "value": false
+    }
+  },
+  "AutoloadNamespaces": {
+    "MediaWiki\\Extension\\UserAchievements\\": "src/"
+  },
+  "AvailableRights": [
+    "userachievements-admin"
+  ],
+  "APIModules": {
+    "userachievements": "MediaWiki\\Extension\\UserAchievements\\Api\\ApiUserAchievements"
+  },
+  "GroupPermissions": {
+    "sysop": {
+      "userachievements-admin": true
+    }
+  },
+  "Hooks": {
+    "LoadExtensionSchemaUpdates": "main",
+    "ParserFirstCallInit": "main",
+    "UserAchievementsRegisterAchievements": "main"
+  },
+  "HookHandlers": {
+    "main": {
+      "class": "MediaWiki\\Extension\\UserAchievements\\Hook\\HookHandler"
+    }
+  },
+  "MessagesDirs": {
+    "UserAchievements": [
+      "i18n",
+      "i18n/api"
+    ]
+  },
+  "ResourceModules": {
+    "ext.userAchievements.common": {
+      "scripts": [
+        "userAchievements.common/userAchievements.common.js"
+      ],
+      "styles": [
+        "userAchievements.common/userAchievements.common.less"
+      ],
+      "messages": []
+    },
+    "ext.userAchievements.special": {
+      "scripts": [
+        "userAchievements.special/userAchievements.special.js"
+      ],
+      "styles": [
+        "userAchievements.special/userAchievements.special.less"
+      ],
+      "dependencies": [
+        "ext.userAchievements.common"
+      ],
+      "messages": []
+    },
+    "ext.userAchievements.specialAdmin": {
+      "scripts": [
+        "userAchievements.specialAdmin/userAchievements.specialAdmin.js"
+      ],
+      "styles": [
+        "userAchievements.specialAdmin/userAchievements.specialAdmin.less"
+      ],
+      "dependencies": [
+        "ext.userAchievements.special"
+      ],
+      "messages": []
+    },
+    "ext.userAchievements.userBadges": {
+      "scripts": [
+        "userAchievements.userBadges/userAchievements.userBadges.js"
+      ],
+      "styles": [
+        "userAchievements.userBadges/userAchievements.userBadges.less"
+      ],
+      "dependencies": [
+        "ext.userAchievements.common"
+      ],
+      "messages": []
+    }
+  },
+  "ResourceFileModulePaths": {
+    "localBasePath": "modules",
+    "remoteExtPath": "UserAchievements/modules"
+  },
+  "SpecialPages": {
+    "UserAchievements": "MediaWiki\\Extension\\UserAchievements\\Special\\SpecialUserAchievements"
+  },
+  "ServiceWiringFiles": [ "src/ServiceWiring.php" ],
+  "manifest_version": 2
+}

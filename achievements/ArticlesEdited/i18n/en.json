@@ -1,0 +1,15 @@
+{
+  "@metadata": {
+    "authors": [
+      "Chris Rishel"
+    ]
+  },
+  "userachievements-articlesedited-name": "Articles edited",
+  "userachievements-articlesedited-desc": "Make edits to different public articles on the wiki",
+  "userachievements-articlesedited-1-desc": "Edit 5 articles",
+  "userachievements-articlesedited-2-desc": "Edit 10 articles",
+  "userachievements-articlesedited-3-desc": "Edit 25 articles",
+  "userachievements-articlesedited-4-desc": "Edit 50 articles",
+  "userachievements-articlesedited-5-desc": "Edit 100 articles",
+  "userachievements-articlesedited-stat-articlesedited-name": "Articles edited"
+}

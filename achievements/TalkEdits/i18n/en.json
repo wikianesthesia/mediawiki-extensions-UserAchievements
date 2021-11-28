@@ -1,0 +1,15 @@
+{
+  "@metadata": {
+    "authors": [
+      "Chris Rishel"
+    ]
+  },
+  "userachievements-talkedits-name": "Discussion posts",
+  "userachievements-talkedits-desc": "Post to the discussion of public articles on the wiki",
+  "userachievements-talkedits-1-desc": "Make your first discussion post",
+  "userachievements-talkedits-2-desc": "Make 10 discussion posts",
+  "userachievements-talkedits-3-desc": "Make 100 discussion posts",
+  "userachievements-talkedits-4-desc": "Make 500 discussion posts",
+  "userachievements-talkedits-5-desc": "Make 1000 discussion posts",
+  "userachievements-talkedits-stat-talkedits-name": "Discussion posts"
+}

@@ -1,0 +1,20 @@
+{
+  "@metadata": {
+    "authors": [
+      "Chris Rishel"
+    ]
+  },
+  "apihelp-userachievements-summary": "Allows actions to be taken for user achievements",
+  "apihelp-userachievements-param-uaaction": "The user achievements action to invoke",
+  "apihelp-userachievements-param-token": "A \"csrf\" token (if applicable)",
+  "apihelp-userachievements+purgeuserbadges-summary": "Purge all user badges for the achievement for all users",
+  "apihelp-userachievements+purgeuserbadges-param-achievement_id": "The achievement ID (use '*' for all achievements)",
+  "apihelp-userachievements+rebuildachievement-summary": "Rebuild the achievement for all users",
+  "apihelp-userachievements+rebuildachievement-param-achievement_id": "The achievement ID (use '*' for all achievements)",
+  "apihelp-userachievements+rebuildachievement-param-purgeuserbadges": "Should all existing user badges be purged for this achievement prior to rebuilding",
+  "apihelp-userachievements+editachievement-summary": "Edit an achievement",
+  "apihelp-userachievements+editachievement-param-achievement_id": "The achievement ID",
+  "apihelp-userachievements+editachievement-param-enabled": "Should the achievement be enabled",
+  "apihelp-userachievements+tryachieve-summary": "Try to achieve an achievement",
+  "apihelp-userachievements+tryachieve-param-achievement_id": "The achievement ID"
+}

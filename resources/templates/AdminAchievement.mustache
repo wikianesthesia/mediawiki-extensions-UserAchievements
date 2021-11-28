@@ -1,0 +1,32 @@
+<div class="card mb-3">
+    <h5 class="card-header"><a href="{{link}}">{{name}}</a></h5>
+    <div class="card-body">
+        <form>
+            <input type="hidden" class="userachievements-admin-achievement-achievement_id" value="{{id}}" />
+            <div class="form-row mb-3">
+                <div class="form-inline col-md-2">
+                    <div class="form-check">
+                        <input class="form-check-input userachievements-admin-achievement-enable" type="checkbox" value="" id="invalidCheck"{{#enabled}} checked{{/enabled}}>
+                        <label class="form-check-label" for="invalidCheck">
+                            Enabled
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-10">
+                    <button type="button" class="btn btn-primary userachievements-admin-achievement-rebuildachievement">Rebuild achievement</button>
+                    <button type="button" class="btn btn-primary userachievements-admin-achievement-purgeuserbadges">Purge user badges</button>
+                </div>
+            </div>
+            <!--
+            <div class="form-row form-inline mb-3">
+                <label for="awardLevel">Award level</label>
+                <select id="awardLevel" class="form-control">
+                    <option>1</option>
+                </select>
+                <label for="awardUser">to user</label>
+                <input type="text" class="form-control mr-sm-2" id="awardUser">
+            </div>
+            -->
+        </form>
+    </div>
+</div>

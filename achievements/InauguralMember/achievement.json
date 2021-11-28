@@ -1,0 +1,21 @@
+{
+  "author": [
+    "Chris Rishel"
+  ],
+  "version": "1.0",
+  "priority": 25,
+  "levels": 2,
+  "color": "#9fc96b",
+  "config": {
+    "EpochStart": "",
+    "EpochLength": "1 year",
+    "IncludeDeletedRevisions": false,
+    "IncludeNamespaces": [],
+    "IncludeNullRevisions": false,
+    "IncludeRedirects": true,
+    "RequireEmailConfirmation": true
+  },
+  "MessagesDirs": [
+    "i18n"
+  ]
+}

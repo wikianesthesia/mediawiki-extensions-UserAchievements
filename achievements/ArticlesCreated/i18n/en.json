@@ -1,0 +1,15 @@
+{
+  "@metadata": {
+    "authors": [
+      "Chris Rishel"
+    ]
+  },
+  "userachievements-articlescreated-name": "Articles created",
+  "userachievements-articlescreated-desc": "Create new public articles on the wiki",
+  "userachievements-articlescreated-1-desc": "Create your first article",
+  "userachievements-articlescreated-2-desc": "Create 10 articles",
+  "userachievements-articlescreated-3-desc": "Create 25 articles",
+  "userachievements-articlescreated-4-desc": "Create 50 articles",
+  "userachievements-articlescreated-5-desc": "Create 100 articles",
+  "userachievements-articlescreated-stat-articlescreated-name": "Articles created"
+}

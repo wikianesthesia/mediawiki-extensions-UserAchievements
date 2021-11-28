@@ -1,0 +1,26 @@
+{
+  "@metadata": {
+    "authors": [
+      "Chris Rishel"
+    ]
+  },
+  "userachievements": "User Achievements",
+  "userachievements-extensionname": "UserAchievements",
+  "userachievements-desc": "Adds achievements awarded for site activity and contributions",
+  "userachievements-badge-progress-achieved": "Achieved on $1",
+  "userachievements-error-achievementdisabled": "Achievement is disabled",
+  "userachievements-error-invalidachievementid": "Invalid achievement id",
+  "userachievements-error-invalidlevel": "Invalid badge level for achievement",
+  "userachievements-error-invaliduser": "Invalid user",
+  "userachievements-error-permissiondenied": "Permission denied",
+  "userachievements-error-usernotloggedin": "User not logged in",
+  "userachievements-special-achievementadministration-button": "Achievement administration",
+  "userachievements-special-badgeinfo-userlist-heading": "List of users",
+  "userachievements-special-badgeinfo-userlist-limitnotice": "The first $1 users to achieve this badge are shown. $2",
+  "userachievements-special-badgeinfo-userlist-showall": "Show all users with this achievement.",
+  "userachievements-special-badgeinfo-userlist-user": "User",
+  "userachievements-special-badgeinfo-userlist-achievedon": "Achieved on",
+  "userachievements-special-badgeinfo-userlist-nousers": "No users have achieved this badge",
+  "userachievements-userbadges-title": "Achievements",
+  "userachievements-userbadges-progresslink": "See progress for all achievements"
+}
