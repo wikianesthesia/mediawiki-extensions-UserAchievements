@@ -82,7 +82,7 @@ class Badge {
 
             if( !$description ) {
                 if( isset( $this->definition[ 'description' ] ) && $this->definition[ 'description' ] ) {
-                    $name = $this->definition[ 'description' ];
+                    $description = $this->definition[ 'description' ];
                 } else {
                     $description = $this->getAchievement()->getDescription();
                 }

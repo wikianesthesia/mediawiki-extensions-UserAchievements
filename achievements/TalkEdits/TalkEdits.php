@@ -19,10 +19,9 @@ class TalkEdits extends AbstractEditsAchievement {
     protected function doGetUserStats( UserStats &$userStats ) {
         global $wgNamespaceContentModels;
 
-        $achievementConfig = $this->getConfig();
         $includeNamespacesConfigVar = 'IncludeNamespaces';
 
-        $includeNamespaces = $achievementConfig[ $includeNamespacesConfigVar ];
+        $includeNamespaces = $this->getConfig( $includeNamespacesConfigVar );
 
         if( !$includeNamespaces || !is_array( $includeNamespaces ) ) {
             $includeNamespaces = [ NS_TALK ];

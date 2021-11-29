@@ -112,7 +112,14 @@
     },
     "config": {
       "type": "object",
-      "description": "Configuration options for this achievement. Unlike the extension.json definition of this field, this should be a simple object with the variable names as properties and default values as values. The configuration value name will be stored in $wgUserAchievementsAchievementsConfig[ $achievementId ].",
+      "description": "Configuration options for this achievement. Unlike the extension.json definition of this field, this should be a simple object with the variable names as properties and default values as values.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "AutoloadClasses": {
+      "type": "object",
+      "description": "A list of classes and files to autoload. This should be a simple object with the class name as properties and the local path to the class files function as values.",
       "items": {
         "type": "string"
       }

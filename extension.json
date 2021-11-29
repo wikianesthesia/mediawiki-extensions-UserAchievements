@@ -11,7 +11,9 @@
   "type": "other",
   "requires": {
     "MediaWiki": ">= 1.35.0",
-    "extensions": {}
+    "extensions": {
+      "JsonSchemaClasses": "*"
+    }
   },
   "callback": "MediaWiki\\Extension\\UserAchievements\\UserAchievements::initialize",
   "config_prefix": "wg",

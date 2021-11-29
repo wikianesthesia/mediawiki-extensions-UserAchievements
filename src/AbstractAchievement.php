@@ -2,6 +2,7 @@
 
 namespace MediaWiki\Extension\UserAchievements;
 
+use MediaWiki\Extension\JsonSchemaClasses\AbstractJsonSchemaClass;
 use MediaWiki\MediaWikiServices;
 use MWException;
 use MWTimestamp;
@@ -10,7 +11,7 @@ use RequestContext;
 use Title;
 use User;
 
-abstract class AbstractAchievement {
+abstract class AbstractAchievement extends AbstractJsonSchemaClass {
     /**
      * @var string
      */
@@ -20,22 +21,6 @@ abstract class AbstractAchievement {
      * @var bool
      */
     protected $enabled = false;
-
-    /**
-     * @var string
-     */
-    protected $localdirectory = '';
-
-    /**
-     * @var string
-     */
-    protected $remotedirectory = '';
-
-    /**
-     * Definition data from achievement.json
-     * @var array
-     */
-    protected $definition = [];
 
     /**
      * @var string
@@ -55,11 +40,8 @@ abstract class AbstractAchievement {
 
     public function __construct() {
         $this->loadDBConfig();
-        $this->loadDefinition();
 
-        if( true || $this->isEnabled() ) {
-            $this->setHooks();
-        }
+        parent::__construct();
     }
 
     /**
@@ -82,49 +64,7 @@ abstract class AbstractAchievement {
     public function getColor(): string {
         global $wgUserAchievementsDefaultAchievedColor;
 
-        return $this->definition[ 'color' ] ?: $wgUserAchievementsDefaultAchievedColor;
-    }
-
-    /**
-     * @return mixed|array
-     */
-    public function getConfig( string $var = '' ) {
-        global $wgUserAchievementsAchievementsConfig;
-
-        if( $var ) {
-            return $wgUserAchievementsAchievementsConfig[ $this->getId() ][ $var ] ?? null;
-        } else {
-            return $wgUserAchievementsAchievementsConfig[ $this->getId() ];
-        }
-    }
-
-    /**
-     * @return string
-     */
-    public function getDescription(): string {
-        if( $this->description === null ) {
-            $descriptionmsg = '';
-
-            if( $this->definition[ 'descriptionmsg' ] ) {
-                $descriptionmsg = wfMessage( $this->definition[ 'descriptionmsg' ] );
-            }
-
-            if( !$descriptionmsg || !$descriptionmsg->exists() ) {
-                $descriptionmsg = wfMessage( $this->getDefaultDescriptionMsgKey() );
-            }
-
-            if( $descriptionmsg->exists() ) {
-                $description = $descriptionmsg->text();
-            } elseif( $this->definition[ 'description' ] ) {
-                $description = $this->definition[ 'description' ];
-            } else {
-                $description = '';
-            }
-
-            $this->description = $description;
-        }
-
-        return $this->description;
+        return $this->getDefinition( 'color' ) ?: $wgUserAchievementsDefaultAchievedColor;
     }
 
     /**
@@ -132,7 +72,7 @@ abstract class AbstractAchievement {
      */
     public function getId(): string {
         if( !$this->id ) {
-            $this->id = substr( strrchr( static::class, '\\' ), 1 );
+            $this->id = $this->getClass( false );
         }
 
         return $this->id;
@@ -142,7 +82,7 @@ abstract class AbstractAchievement {
      * @return integer
      */
     public function getLevels(): int {
-        return $this->definition[ 'levels' ] ?? 0;
+        return $this->getDefinition( 'levels' ) ?: 0;
     }
 
     public function getLinkURL( int $level = 0 ): string {
@@ -160,69 +100,15 @@ abstract class AbstractAchievement {
     /**
      * @return string
      */
-    public function getLocalDirectory(): string {
-        if( !$this->localdirectory ) {
-            $reflectionClass = new ReflectionClass( static::class );
-            $classFilename = $reflectionClass->getFileName();
-
-            $this->localdirectory = str_replace( '/' . $reflectionClass->getShortName() . '.php', '', $classFilename );
-        }
-
-        return $this->localdirectory;
-    }
-
-    /**
-     * @return string
-     */
     public function getMsgKeyPrefix(): string {
         return strtolower( UserAchievements::getExtensionName() . '-' . $this->getId() );
-    }
-
-    /**
-     * @return string
-     */
-    public function getName(): string {
-        if( $this->name === null ) {
-            $namemsg = '';
-
-            if( $this->definition[ 'namemsg' ] ) {
-                $namemsg = wfMessage( $this->definition[ 'namemsg' ] );
-            }
-
-            if( !$namemsg || !$namemsg->exists() ) {
-                $namemsg = wfMessage( $this->getDefaultNameMsgKey() );
-            }
-
-            if( $namemsg->exists() ) {
-                $name = $namemsg->text();
-            } elseif( $this->definition[ 'name' ] ) {
-                $name = $this->definition[ 'name' ];
-            } else {
-                $name = $this->getId();
-            }
-
-            $this->name = $name;
-        }
-
-        return $this->name;
     }
 
     /**
      * @return integer
      */
     public function getPriority(): int {
-        return $this->definition[ 'priority' ];
-    }
-
-    /**
-     * @return string
-     */
-    public function getRemoteDirectory(): string {
-        if( !$this->remotedirectory ) {
-            $this->remotedirectory = str_replace( $_SERVER[ 'DOCUMENT_ROOT' ], '', $this->getLocalDirectory() );
-        }
-
-        return $this->remotedirectory;
+        return $this->getDefinition( 'priority' );
     }
 
     /**
@@ -235,7 +121,7 @@ abstract class AbstractAchievement {
     }
 
     public function getStats(): array{
-        return $this->definition[ 'stats' ];
+        return $this->getDefinition( 'stats' );
     }
 
     /**
@@ -286,7 +172,7 @@ abstract class AbstractAchievement {
      * @return bool
      */
     public function isSecret(): bool {
-        return $this->definition[ 'secret' ];
+        return $this->getDefinition( 'secret' );
     }
 
     /**
@@ -343,15 +229,6 @@ abstract class AbstractAchievement {
         }
 
         return true;
-    }
-
-    /**
-     * @return array
-     */
-    public function setConfig( string $var, $value = null ) {
-        global $wgUserAchievementsAchievementsConfig;
-
-        $wgUserAchievementsAchievementsConfig[ $this->getId() ][ $var ] = $value;
     }
 
     /**
@@ -532,15 +409,17 @@ abstract class AbstractAchievement {
     /**
      * @return string
      */
-    protected function getDefaultDescriptionMsgKey(): string {
-        return $this->getMsgKeyPrefix() . '-desc';
+    protected function getDefinitionFile(): string {
+        return $this->getLocalDirectory() . '/achievement.json';
     }
 
-    /**
-     * @return string
-     */
-    protected function getDefaultNameMsgKey(): string {
-        return $this->getMsgKeyPrefix() . '-name';
+    protected function getSchemaClass( bool $includeNamespace = true ): string {
+        // Important that this uses self and not static
+        return $this->getJsonSchemaClassManager()->getClass( self::class, $includeNamespace );
+    }
+
+    protected function getSchemaFile(): string {
+        return UserAchievements::getExtensionLocalDirectory() . '/resources/schema/achievement.schema.json';
     }
 
     /**
@@ -571,179 +450,39 @@ abstract class AbstractAchievement {
         return true;
     }
 
-    /**
-     * @return bool
-     * @throws \MWException
-     */
-    protected function loadDefinition(): bool {
-        global $wgUserAchievementsAchievementsConfig, $wgMessagesDirs;
 
-        $achievementId = $this->getId();
-        $achievementLocalDirectory = $this->getLocalDirectory();
 
-        // Load achievement.json definition
-        if( !is_dir( $achievementLocalDirectory ) ) {
-            // TODO throw error achievement directory not found
-
-            return false;
-        }
-
-        $achievementDefinitionFile = $achievementLocalDirectory . '/achievement.json';
-
-        $achievementDefinitionJson = file_get_contents( $achievementDefinitionFile );
-
-        if( $achievementDefinitionJson === false ) {
-            // TODO log error achievement definition file not found or not accessible
-
-            return false;
-        }
-
-        $achievementDefinition = json_decode( $achievementDefinitionJson, true );
-
-        if( !is_array( $achievementDefinition ) ) {
-            // TODO log error json file not valid
-
-            return false;
-        }
-
-        // Get achievement.json schema
-        $achievementSchema = UserAchievements::getAchievementSchema();
-
-        // Levels may be defined statically in the definition or handled programmatically. Programmatic definition
-        // should take priority.
-        $achievementDefinition[ 'levels' ] = $this->getLevels() ?: ( $achievementDefinition[ 'levels' ] ?: 1 );
-
-        // Make sure a badge is initialized for each level of the achievement
-        for( $level = 1; $level <= $achievementDefinition[ 'levels' ]; $level++ ) {
-            $achievementDefinition[ 'badges' ][ $level - 1 ] = $achievementDefinition[ 'badges' ][ $level - 1 ] ?? [];
-        }
-
-        $this->processDefinitionProperties( $achievementSchema, $achievementDefinition );
-
-        // Add configuration directives
-        // Initialize config for achievement regardless if any config directives are defined
-        if( !isset( $wgUserAchievementsAchievementsConfig[ $achievementId ] ) ) {
-            $wgUserAchievementsAchievementsConfig[ $achievementId ] = [];
-        }
-
-        if( isset( $achievementDefinition[ 'config' ] ) ) {
-            foreach( $achievementDefinition[ 'config' ] as $configVar => $defaultValue ) {
-                if( !isset( $wgUserAchievementsAchievementsConfig[ $achievementId ][ $configVar ] ) ) {
-                    $wgUserAchievementsAchievementsConfig[ $achievementId ][ $configVar ] = $defaultValue;
-                }
-            }
-        }
-
-        // Add message directories
-        if( isset( $achievementDefinition[ 'MessagesDirs' ] ) ) {
-            foreach( $achievementDefinition[ 'MessagesDirs' ] as $messagesDir ) {
-                $wgMessagesDirs[ 'UserAchievements' ][] = $this->getLocalDirectory() . '/' . $messagesDir;
-            }
-        }
-
+    protected function postprocessDefinition( array &$definition ) {
         // Process badges
-        if( $achievementDefinition[ 'levels' ] < 1 ) {
+        if( $definition[ 'levels' ] < 1 ) {
             throw new MWException( 'Achievement must have at least 1 level.' );
-        } elseif( $achievementDefinition[ 'levels' ] < count( $achievementDefinition[ 'badges' ] ) ) {
+        } elseif( $definition[ 'levels' ] < count( $definition[ 'badges' ] ) ) {
             throw new MWException( 'Achievement levels must be greater than or equal to the number of badges defined.' );
         }
 
         $badges = [];
 
         // Create the badge definition for each level of the achievement
-        for( $level = 1; $level <= $achievementDefinition[ 'levels' ]; $level++ ) {
-            $badgeDefinition = $achievementDefinition[ 'badges' ][ $level - 1 ];
+        for( $level = 1; $level <= $definition[ 'levels' ]; $level++ ) {
+            $badgeDefinition = $definition[ 'badges' ][ $level - 1 ];
 
-            $badgeDefinition[ 'achievementid' ] = $achievementId;
+            $badgeDefinition[ 'achievementid' ] = $this->getId();
             $badgeDefinition[ 'level' ] = $level;
 
             $badges[] = new Badge( $badgeDefinition );
         }
 
-        $this->definition = $achievementDefinition;
         $this->badges = $badges;
-
-        return true;
     }
 
-    protected function processDefinitionProperties( array $schema, array &$definition ) {
-        // Validate and import definition data into static class property
-        foreach( $schema[ 'properties' ] as $propertyName => $propertyDefinition ) {
-            // Make sure required property defined
-            if( isset( $schema[ 'properties' ][ $propertyName ][ 'required' ] ) ) {
-                if( $schema[ 'properties' ][ $propertyName ][ 'required' ] &&
-                    !isset( $definition[ $propertyName ]) ) {
-                    // TODO throw exception required property missing
-                    throw new MWException( 'Required property missing' );
+    protected function preprocessDefinition( array &$definition ) {
+        // Levels may be defined statically in the definition or handled programmatically. Programmatic definition
+        // should take priority.
+        $definition[ 'levels' ] = $this->getLevels() ?: ( $definition[ 'levels' ] ?: 1 );
 
-                    return false;
-                }
-            }
-
-            $propertyValue = null;
-
-            if( isset( $definition[ $propertyName ] ) ) {
-                $propertyValue = $definition[ $propertyName ];
-            } else {
-                if( isset( $schema[ 'properties' ][ $propertyName ][ 'default' ] ) ) {
-                    $propertyValue = $schema[ 'properties' ][ $propertyName ][ 'default' ];
-                } else {
-                    // If the type is unambiguous (i.e. a string and not an array of possible types)
-                    // cast null to the appropriate type
-                    if( isset( $schema[ 'properties' ][ $propertyName ][ 'type' ] ) ) {
-                        // If the type is an array of valid types, use the first type in the array
-                        $nullType = gettype( $schema[ 'properties' ][ $propertyName ][ 'type' ] ) === 'array' ?
-                            reset( $schema[ 'properties' ][ $propertyName ][ 'type' ] ) :
-                            $schema[ 'properties' ][ $propertyName ][ 'type' ];
-
-                        // Since objects are actually imported as arrays, if the type is object, change to array
-                        if( $nullType === 'object' ) {
-                            $nullType = 'array';
-                        }
-
-                        settype($propertyValue, $nullType );
-                    }
-                }
-            }
-
-            if( isset( $schema[ 'properties' ][ $propertyName ][ 'type' ] ) ) {
-                $propertyTypes = $schema[ 'properties' ][ $propertyName ][ 'type' ];
-
-                if( !is_array( $propertyTypes ) ) {
-                    $propertyTypes = [ $propertyTypes ];
-                }
-
-                // Objects will be imported as arrays, so this is a hack to fix that type casting
-                if( in_array( 'object', $propertyTypes ) ) {
-                    $propertyTypes[] = 'array';
-                }
-
-                if( !in_array( gettype( $propertyValue ), $propertyTypes ) ) {
-                    // TODO throw exception type mismatch
-                    /*
-                    echo( $propertyName);
-                    var_dump( $propertyValue );
-                    echo( gettype($propertyValue));
-                    var_dump($propertyTypes);
-                    */
-                    throw new \MWException( 'Type mismatch' );
-
-                    return false;
-                }
-            }
-
-            $definition[ $propertyName ] = $propertyValue;
-
-            if( isset( $schema[ 'properties' ][ $propertyName ][ 'properties' ] ) ) {
-                $this->processDefinitionProperties( $schema[ 'properties' ][ $propertyName ], $definition[ $propertyName ] );
-            }
-
-            if( isset( $schema[ 'properties' ][ $propertyName ][ 'items' ] ) &&
-                isset( $schema[ 'properties' ][ $propertyName ][ 'items' ][ 'properties' ] ) ) {
-                foreach( $definition[ $propertyName ] as $itemIndex => $item ) {
-                    $this->processDefinitionProperties( $schema[ 'properties' ][ $propertyName ][ 'items' ], $definition[ $propertyName ][ $itemIndex ] );
-                }
-            }
+        // Make sure a badge is initialized for each level of the achievement
+        for( $level = 1; $level <= $definition[ 'levels' ]; $level++ ) {
+            $definition[ 'badges' ][ $level - 1 ] = $definition[ 'badges' ][ $level - 1 ] ?? [];
         }
     }
 
@@ -752,11 +491,11 @@ abstract class AbstractAchievement {
     protected function setHooks() {
         global $wgHooks;
 
-        if( static::$hooksSet ) {
+        if( static::$hooksSet || !$this->isEnabled() ) {
             return;
         }
 
-        foreach( $this->definition[ 'Hooks' ] as $hook => $callback ) {
+        foreach( $this->getDefinition( 'Hooks' ) as $hook => $callback ) {
             if( $callback === 'tryAchieve' ) {
                 $callback = function() {
                     // tryachieve API call or job?
