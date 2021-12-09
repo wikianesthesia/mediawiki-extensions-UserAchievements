@@ -2,8 +2,8 @@
 
 namespace MediaWiki\Extension\UserAchievements\Hook;
 
-use MediaWiki\Extension\UserAchievements\AchievementRegistry;
+use MediaWiki\Extension\JsonSchemaClasses\ClassRegistry;
 
 interface UserAchievementsRegisterAchievementsHook {
-    public function onUserAchievementsRegisterAchievements( AchievementRegistry $achievementRegistry );
+    public function onUserAchievementsRegisterAchievements( ClassRegistry $achievementRegistry );
 }

@@ -1,8 +1,9 @@
 {
+  "class": "MediaWiki\\Extension\\UserAchievements\\Achievement\\TalkEdits",
+  "version": "1.0",
   "author": [
     "Chris Rishel"
   ],
-  "version": "1.0",
   "priority": 90,
   "levels": 5,
   "color": "#f7e20a",

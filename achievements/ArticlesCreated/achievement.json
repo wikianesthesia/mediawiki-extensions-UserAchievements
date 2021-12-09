@@ -1,8 +1,9 @@
 {
+  "class": "MediaWiki\\Extension\\UserAchievements\\Achievement\\ArticlesCreated",
+  "version": "1.0",
   "author": [
     "Chris Rishel"
   ],
-  "version": "1.0",
   "priority": 125,
   "levels": 5,
   "color": "#b6b2a9",

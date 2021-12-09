@@ -2,7 +2,7 @@
 
 namespace MediaWiki\Extension\UserAchievements\Hook;
 
-use MediaWiki\Extension\UserAchievements\AchievementRegistry;
+use MediaWiki\Extension\JsonSchemaClasses\ClassRegistry;
 use MediaWiki\HookContainer\HookContainer;
 
 class HookRunner implements UserAchievementsRegisterAchievementsHook {
@@ -16,7 +16,7 @@ class HookRunner implements UserAchievementsRegisterAchievementsHook {
         $this->hookContainer = $hookContainer;
     }
 
-    public function onUserAchievementsRegisterAchievements( AchievementRegistry $achievementRegistry ) {
+    public function onUserAchievementsRegisterAchievements( ClassRegistry $achievementRegistry ) {
         return $this->hookContainer->run(
             'UserAchievementsRegisterAchievements',
             [ &$achievementRegistry ]

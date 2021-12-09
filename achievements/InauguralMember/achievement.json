@@ -1,8 +1,9 @@
 {
+  "class": "MediaWiki\\Extension\\UserAchievements\\Achievement\\InauguralMember",
+  "version": "1.0",
   "author": [
     "Chris Rishel"
   ],
-  "version": "1.0",
   "priority": 25,
   "levels": 2,
   "color": "#9fc96b",

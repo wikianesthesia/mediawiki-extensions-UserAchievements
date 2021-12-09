@@ -1,8 +1,9 @@
 {
+  "class": "MediaWiki\\Extension\\UserAchievements\\Achievement\\MembershipYears",
+  "version": "1.0",
   "author": [
     "Chris Rishel"
   ],
-  "version": "1.0",
   "priority": 50,
   "color": "#e1c9df",
   "config": {

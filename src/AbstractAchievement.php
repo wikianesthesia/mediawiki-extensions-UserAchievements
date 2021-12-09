@@ -38,10 +38,10 @@ abstract class AbstractAchievement extends AbstractJsonSchemaClass {
     protected $badges = [];
 
 
-    public function __construct() {
+    public function __construct( array $definition ) {
         $this->loadDBConfig();
 
-        parent::__construct();
+        parent::__construct( $definition );
     }
 
     /**
@@ -72,7 +72,7 @@ abstract class AbstractAchievement extends AbstractJsonSchemaClass {
      */
     public function getId(): string {
         if( !$this->id ) {
-            $this->id = $this->getClass( false );
+            $this->id = $this->getClassString( static::class, false );
         }
 
         return $this->id;
@@ -406,20 +406,8 @@ abstract class AbstractAchievement extends AbstractJsonSchemaClass {
         ];
     }
 
-    /**
-     * @return string
-     */
-    protected function getDefinitionFile(): string {
-        return $this->getLocalDirectory() . '/achievement.json';
-    }
-
-    protected function getSchemaClass( bool $includeNamespace = true ): string {
-        // Important that this uses self and not static
-        return $this->getJsonSchemaClassManager()->getClass( self::class, $includeNamespace );
-    }
-
-    protected function getSchemaFile(): string {
-        return UserAchievements::getExtensionLocalDirectory() . '/resources/schema/achievement.schema.json';
+    protected function getSchemaClass(): string {
+        return AchievementSchema::class;
     }
 
     /**

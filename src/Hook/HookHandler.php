@@ -4,11 +4,10 @@ namespace MediaWiki\Extension\UserAchievements\Hook;
 
 use DatabaseUpdater;
 use Parser;
-use MediaWiki\Extension\UserAchievements\AchievementRegistry;
+use MediaWiki\Extension\JsonSchemaClasses\ClassRegistry;
 use MediaWiki\Extension\UserAchievements\UserAchievements;
 
 class HookHandler implements UserAchievementsRegisterAchievementsHook {
-
     public function onLoadExtensionSchemaUpdates( DatabaseUpdater $updater ) {
         # Make sure these are in the order you want them added to the database. The keys are the table names and the
         # values are any field in the table (used to see if the table is empty to insert the default data).
@@ -52,19 +51,9 @@ class HookHandler implements UserAchievementsRegisterAchievementsHook {
         $parser->setHook( 'userbadges', 'MediaWiki\\Extension\\UserAchievements\\Parser\\UserBadges::render' );
     }
 
-    public function onUserAchievementsRegisterAchievements( AchievementRegistry $achievementRegistry ) {
+    public function onUserAchievementsRegisterAchievements( ClassRegistry $achievementRegistry ) {
         // Enumerate all builtin achievements, which should be contained within
         // a subdirectory of the achievements folder
-        $achievementsLocalDirectory = UserAchievements::getAchievementsLocalDirectory();
-
-        foreach( scandir( $achievementsLocalDirectory ) as $achievementId ) {
-            if( $achievementId !== '.' && $achievementId !== '..' && is_dir( $achievementsLocalDirectory . '/' . $achievementId ) ) {
-                $achievementRegistry->registerAchievement(
-                    $achievementId,
-                    UserAchievements::getDefaultAchievementClass( $achievementId ),
-                    $achievementsLocalDirectory . '/' . $achievementId
-                );
-            }
-        }
+        $achievementRegistry->register( UserAchievements::getAchievementsLocalDirectory(), true );
     }
 }

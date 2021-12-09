@@ -3,25 +3,19 @@
 namespace MediaWiki\Extension\UserAchievements;
 
 use Linker;
+use MediaWiki\Extension\JsonSchemaClasses\JsonSchemaClassManager;
 use MediaWiki\Extension\UserAchievements\Hook\HookRunner;
 use MediaWiki\Logger\LoggerFactory;
 use MediaWiki\MediaWikiServices;
+use Psr\Log\LoggerInterface;
 use RequestContext;
 use TemplateParser;
 use User;
 use Wikimedia\Rdbms\DBConnRef;
 
 class UserAchievements {
-    /**
-     * @var AbstractAchievement[]
-     */
-    protected static $achievements = [];
-    protected static $achievementSchema = [];
+    protected const SCHEMA_CLASS = AchievementSchema::class;
 
-    /**
-     * @var AchievementRegistry
-     */
-    protected static $achievementRegistry;
     protected static $achievementsLocalDirectory;
     protected static $extensionLocalDirectory;
 
@@ -38,6 +32,11 @@ class UserAchievements {
     protected static $userBadgesByAchievement = [];
 
     /**
+     * @var JsonSchemaClassManager
+     */
+    protected static $classManager;
+
+    /**
      * @var HookRunner
      */
     protected static $hookRunner;
@@ -49,14 +48,12 @@ class UserAchievements {
     protected static $templateParser;
 
 
-
-
     /**
      * @param string $achievementId
-     * @return AbstractAchievement|false
+     * @return AbstractAchievement|null
      */
-    public static function getAchievement( string $achievementId ) {
-        return static::$achievements[ $achievementId ] ?? false;
+    public static function getAchievement( string $achievementId ): ?AbstractAchievement {
+        return static::$classManager->getClassInstanceForSchema( static::SCHEMA_CLASS, $achievementId );
     }
 
 
@@ -65,37 +62,7 @@ class UserAchievements {
      * @return AbstractAchievement[]
      */
     public static function getAchievements(): array {
-        return static::$achievements;
-    }
-
-
-
-    /**
-     * @return array|false
-     */
-    public static function getAchievementSchema() {
-        if( empty( static::$achievementSchema ) ) {
-            $achievementSchemaFile = static::getExtensionLocalDirectory() . '/docs/achievement.schema.json';
-            $achievementSchemaJson = file_get_contents( $achievementSchemaFile );
-
-            if( $achievementSchemaJson === false ) {
-                // TODO log error achievement schema file not found or not accessible
-
-                return false;
-            }
-
-            $achievementSchema = json_decode( $achievementSchemaJson, true );
-
-            if( !is_array( $achievementSchema ) ) {
-                // TODO log error json file not valid
-
-                return false;
-            }
-
-            static::$achievementSchema = $achievementSchema;
-        }
-
-        return static::$achievementSchema;
+        return static::$classManager->getClassInstancesForSchema( static::SCHEMA_CLASS );
     }
 
 
@@ -139,16 +106,6 @@ class UserAchievements {
 
 
 
-    /**
-     * @param string $achievementId
-     * @return class-string<AchievementTrait>
-     */
-    public static function getDefaultAchievementClass( string $achievementId ): string {
-        return '\\MediaWiki\\Extension\\' . static::getExtensionName() . '\\Achievement\\' . $achievementId;
-    }
-
-
-
     public static function getExtensionLocalDirectory(): string {
         if( !static::$extensionLocalDirectory ) {
             static::$extensionLocalDirectory = realpath( __DIR__ . '/..' );
@@ -169,9 +126,9 @@ class UserAchievements {
 
 
     /**
-     * @return \Psr\Log\LoggerInterface
+     * @return LoggerInterface
      */
-    public static function getLogger() {
+    public static function getLogger(): LoggerInterface {
         if( !static::$logger ) {
             static::$logger = LoggerFactory::getInstance( static::getExtensionName() );
         }
@@ -245,13 +202,8 @@ class UserAchievements {
 
 
     public static function initialize() {
-        static::$hookRunner = MediaWikiServices::getInstance()->get( 'UserAchievementsHookRunner' );
-
-        static::registerAchievements();
-
-        foreach( array_keys( static::$achievementRegistry->getAchievements() ) as $achievementId ) {
-            static::loadAchievement( $achievementId );
-        }
+        static::$classManager = MediaWikiServices::getInstance()->get( 'JsonSchemaClassManager' );
+        static::$classManager->registerSchema(AchievementSchema::class );
     }
 
 
@@ -294,31 +246,6 @@ class UserAchievements {
     }
 
 
-
-    /**
-     * @param string $achievementId
-     * @return bool
-     */
-    protected static function loadAchievement( string $achievementId ): bool {
-        $achievementData = static::$achievementRegistry->getAchievement( $achievementId );
-
-        if( !$achievementData ) {
-            return false;
-        }
-
-        // Achievement must include a class file with the same filename as the achievement id
-        $classFile = $achievementData[ 'localDirectory' ] . '/' . $achievementId . '.php';
-
-        require_once( $classFile );
-
-        $achievementClass = $achievementData[ 'class' ];
-
-        static::$achievements[ $achievementId ] = new $achievementClass();
-
-        return true;
-    }
-
-
     protected static function loadUserBadges( User $user = null ): bool {
         $user = $user ?: RequestContext::getMain()->getUser();
 
@@ -343,14 +270,5 @@ class UserAchievements {
         }
 
         return true;
-    }
-
-
-
-    protected static function registerAchievements() {
-        static::$achievementRegistry = new AchievementRegistry();
-
-        // The builtin achievements are added using a HookHandler
-        static::$hookRunner->onUserAchievementsRegisterAchievements( static::$achievementRegistry );
     }
 }
