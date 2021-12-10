@@ -4,6 +4,23 @@
   "type": "object",
   "additionalProperties": false,
   "properties": {
+    "id": {
+      "type": "string",
+      "description": "The id of the achievement. This must be unique across all achievements. If not specified, will default to the class name (without the namespace)."
+    },
+    "class": {
+      "type": "string",
+      "description": "The full class name (including namespace) of the achievement",
+      "required": true
+    },
+    "classfile": {
+      "type": "string",
+      "description": "The relative path to the achievement class php file. If not specified, will default to the class name (without the namespace) in the same directory as the json definition."
+    },
+    "version": {
+      "type": "string",
+      "description": "The version of this release of the achievement."
+    },
     "author": {
       "type": [
         "string",
@@ -14,10 +31,6 @@
         "type": "string"
       },
       "default": ""
-    },
-    "version": {
-      "type": "string",
-      "description": "The version of this release of the achievement."
     },
     "name": {
       "type": "string",
@@ -122,6 +135,20 @@
       "description": "A list of classes and files to autoload. This should be a simple object with the class name as properties and the local path to the class files function as values.",
       "items": {
         "type": "string"
+      }
+    },
+    "AvailableRights": {
+      "type": "array",
+      "description": "User rights added by the class.",
+      "items": {
+        "type": "string"
+      }
+    },
+    "GroupPermissions": {
+      "type": "object",
+      "description": "Default permissions to give to usergroup. This should be a two dimensional object with the usergroup as the first dimension's properties, the rights as the second dimension, and a boolean to grant or deny the right as values.",
+      "items": {
+        "type": "object"
       }
     },
     "Hooks": {

@@ -37,9 +37,8 @@ class UserAchievements {
     protected static $classManager;
 
     /**
-     * @var HookRunner
+     * @var LoggerInterface
      */
-    protected static $hookRunner;
     protected static $logger;
 
     /**
@@ -67,6 +66,9 @@ class UserAchievements {
 
 
 
+    /**
+     * @return string
+     */
     public static function getAchievementsLocalDirectory(): string {
         if( !static::$achievementsLocalDirectory ) {
             $achievementsLocalDirectory = static::getExtensionLocalDirectory() . '/achievements';
@@ -90,6 +92,7 @@ class UserAchievements {
      * @return UserBadge[]
      */
     public static function getBadgesForUser( User $user ): array {
+        // TODO
         return [];
     }
 
@@ -106,6 +109,9 @@ class UserAchievements {
 
 
 
+    /**
+     * @return string
+     */
     public static function getExtensionLocalDirectory(): string {
         if( !static::$extensionLocalDirectory ) {
             static::$extensionLocalDirectory = realpath( __DIR__ . '/..' );
@@ -136,6 +142,11 @@ class UserAchievements {
         return static::$logger;
     }
 
+
+
+    /**
+     * @return TemplateParser
+     */
     public static function getTemplateParser(): TemplateParser {
         if( static::$templateParser === null ) {
             static::$templateParser = new TemplateParser( static::getExtensionLocalDirectory() . '/resources/templates' );
@@ -143,6 +154,7 @@ class UserAchievements {
 
         return static::$templateParser;
     }
+
 
 
     /**
@@ -165,6 +177,8 @@ class UserAchievements {
 
         return static::$userBadgesByAchievement[ $user->getId() ][ $achievementId ][ $level ];
     }
+
+
 
     /**
      * @param User|null $user
@@ -190,6 +204,12 @@ class UserAchievements {
         }
     }
 
+
+
+    /**
+     * @param User|null $user
+     * @return string
+     */
     public static function getUserLink( User $user = null ): string {
         global $wgUserAchievementsUseRealName;
 
@@ -201,6 +221,9 @@ class UserAchievements {
 
 
 
+    /**
+     *
+     */
     public static function initialize() {
         static::$classManager = MediaWikiServices::getInstance()->get( 'JsonSchemaClassManager' );
         static::$classManager->registerSchema(AchievementSchema::class );
@@ -208,7 +231,7 @@ class UserAchievements {
 
 
     /**
-     * @param User $user
+     * @param User|null $user
      * @return bool
      */
     public static function isUserEligible( User $user = null ): bool {
@@ -222,6 +245,11 @@ class UserAchievements {
             !in_array( $user->getName(), $wgUserAchievementsIgnoreUsernames );
     }
 
+
+
+    /**
+     * @param User|null $user
+     */
     public static function tryAchieveAll( User $user = null ) {
         $user = $user ?: RequestContext::getMain()->getUser();
 
@@ -231,11 +259,23 @@ class UserAchievements {
     }
 
 
-    public static function userHasAchieved( $achievementId, $level = 1, User $user = null ): bool {
+
+    /**
+     * @param $achievementId
+     * @param int $level
+     * @param User|null $user
+     * @return bool
+     */
+    public static function userHasAchieved( $achievementId, int $level = 1, User $user = null ): bool {
         return (bool) static::getUserBadge( $achievementId, $level, $user );
     }
 
 
+
+    /**
+     * @param User|null $user
+     * @return bool
+     */
     public static function userIsUserAchievementsAdmin( User $user = null ): bool {
         $user = $user ?: RequestContext::getMain()->getUser();
 
@@ -246,6 +286,11 @@ class UserAchievements {
     }
 
 
+
+    /**
+     * @param User|null $user
+     * @return bool
+     */
     protected static function loadUserBadges( User $user = null ): bool {
         $user = $user ?: RequestContext::getMain()->getUser();
 

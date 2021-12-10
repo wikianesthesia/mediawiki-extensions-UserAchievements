@@ -52,8 +52,6 @@ class HookHandler implements UserAchievementsRegisterAchievementsHook {
     }
 
     public function onUserAchievementsRegisterAchievements( ClassRegistry $achievementRegistry ) {
-        // Enumerate all builtin achievements, which should be contained within
-        // a subdirectory of the achievements folder
         $achievementRegistry->register( UserAchievements::getAchievementsLocalDirectory(), true );
     }
 }
