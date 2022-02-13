@@ -137,6 +137,13 @@
         "type": "string"
       }
     },
+    "AutoloadNamespaces": {
+      "type": "object",
+      "description": "Array containing mapping of namespaces to directories in a PSR-4 compatible manner.",
+      "items": {
+        "type": "string"
+      }
+    },
     "AvailableRights": {
       "type": "array",
       "description": "User rights added by the class.",
