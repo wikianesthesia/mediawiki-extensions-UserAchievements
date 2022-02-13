@@ -1,6 +1,5 @@
 <?php
 
-
 namespace MediaWiki\Extension\UserAchievements\Parser;
 
 use Html;

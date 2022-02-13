@@ -14,8 +14,16 @@ class AchievementSchema extends AbstractSchema {
         return 'achievement.json';
     }
 
+    public function getExtensionName(): string {
+        return UserAchievements::getExtensionName();
+    }
+
     public function getSchemaFile(): string {
         return UserAchievements::getExtensionLocalDirectory() . '/resources/schema/achievement.schema.json';
+    }
+
+    public function getSchemaName(): string {
+        return 'Achievement';
     }
 
     public function registerClasses( &$classRegistry ) {

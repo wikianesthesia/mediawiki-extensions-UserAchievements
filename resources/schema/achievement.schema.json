@@ -164,6 +164,29 @@
       "items": {
         "type": "string"
       }
+    },
+    "ResourceModules": {
+      "type": "object",
+      "description": "ResourceModules to register",
+      "items": {
+        "type": "object"
+      }
+    },
+    "ResourceFileModulePaths": {
+      "type": "object",
+      "description": "Specifies the default paths to use for all ResourceLoader file modules.",
+      "additionalProperties": false,
+      "properties": {
+        "localBasePath": {
+          "type": "string"
+        },
+        "remoteExtPath": {
+          "type": "string"
+        },
+        "remoteSkinPath": {
+          "type": "string"
+        }
+      }
     }
   }
 }

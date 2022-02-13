@@ -18,9 +18,6 @@
   "callback": "MediaWiki\\Extension\\UserAchievements\\UserAchievements::initialize",
   "config_prefix": "wg",
   "config": {
-    "UserAchievementsAchievementsConfig": {
-      "value": []
-    },
     "UserAchievementsDefaultAchievedColor": {
       "value": "#28a745"
     },
