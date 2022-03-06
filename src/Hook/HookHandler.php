@@ -2,13 +2,28 @@
 
 namespace MediaWiki\Extension\UserAchievements\Hook;
 
-use DatabaseUpdater;
-use Parser;
-use MediaWiki\Extension\JsonSchemaClasses\ClassRegistry;
+use MediaWiki\Extension\JsonClasses\Hook\JsonClassRegistrationHook;
+use MediaWiki\Hook\ParserFirstCallInitHook;
+use MediaWiki\Installer\Hook\LoadExtensionSchemaUpdatesHook;
 use MediaWiki\Extension\UserAchievements\UserAchievements;
+use MediaWiki\Extension\UserAchievements\AchievementSchema;
 
-class HookHandler implements UserAchievementsRegisterAchievementsHook {
-    public function onLoadExtensionSchemaUpdates( DatabaseUpdater $updater ) {
+class HookHandler implements
+    JsonClassRegistrationHook,
+    LoadExtensionSchemaUpdatesHook,
+    ParserFirstCallInitHook {
+    /**
+     * @inheritDoc
+     */
+    public function onJsonClassRegistration( $classManager ) {
+        $classManager->registerSchema( AchievementSchema::class );
+        $classManager->loadClassDirectory( AchievementSchema::class, UserAchievements::getAchievementsLocalDirectory(), true );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function onLoadExtensionSchemaUpdates( $updater ) {
         # Make sure these are in the order you want them added to the database. The keys are the table names and the
         # values are any field in the table (used to see if the table is empty to insert the default data).
         $tableNames = [
@@ -47,11 +62,10 @@ class HookHandler implements UserAchievementsRegisterAchievementsHook {
         }
     }
 
-    public function onParserFirstCallInit( Parser $parser ) {
+    /**
+     * @inheritDoc
+     */
+    public function onParserFirstCallInit( $parser ) {
         $parser->setHook( 'userbadges', 'MediaWiki\\Extension\\UserAchievements\\Parser\\UserBadges::render' );
-    }
-
-    public function onUserAchievementsRegisterAchievements( ClassRegistry $achievementRegistry ) {
-        $achievementRegistry->register( UserAchievements::getAchievementsLocalDirectory(), true );
     }
 }

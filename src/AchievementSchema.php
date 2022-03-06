@@ -2,7 +2,7 @@
 
 namespace MediaWiki\Extension\UserAchievements;
 
-use MediaWiki\Extension\JsonSchemaClasses\AbstractSchema;
+use MediaWiki\Extension\JsonClasses\AbstractSchema;
 use MediaWiki\MediaWikiServices;
 
 class AchievementSchema extends AbstractSchema {
@@ -24,10 +24,5 @@ class AchievementSchema extends AbstractSchema {
 
     public function getSchemaName(): string {
         return 'Achievement';
-    }
-
-    public function registerClasses( &$classRegistry ) {
-        MediaWikiServices::getInstance()->get( 'UserAchievementsHookRunner' )
-            ->onUserAchievementsRegisterAchievements( $classRegistry );
     }
 }

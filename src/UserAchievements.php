@@ -3,8 +3,6 @@
 namespace MediaWiki\Extension\UserAchievements;
 
 use Linker;
-use MediaWiki\Extension\JsonSchemaClasses\JsonSchemaClassManager;
-use MediaWiki\Extension\UserAchievements\Hook\HookRunner;
 use MediaWiki\Logger\LoggerFactory;
 use MediaWiki\MediaWikiServices;
 use Psr\Log\LoggerInterface;
@@ -32,11 +30,6 @@ class UserAchievements {
     protected static $userBadgesByAchievement = [];
 
     /**
-     * @var JsonSchemaClassManager
-     */
-    protected static $classManager;
-
-    /**
      * @var LoggerInterface
      */
     protected static $logger;
@@ -52,7 +45,8 @@ class UserAchievements {
      * @return AbstractAchievement|null
      */
     public static function getAchievement( string $achievementId ): ?AbstractAchievement {
-        return static::$classManager->getClassInstanceForSchema( static::SCHEMA_CLASS, $achievementId );
+        return MediaWikiServices::getInstance()->get( 'JsonClassManager' )
+            ->getClassInstanceForSchema( static::SCHEMA_CLASS, $achievementId );
     }
 
 
@@ -61,7 +55,8 @@ class UserAchievements {
      * @return AbstractAchievement[]
      */
     public static function getAchievements(): array {
-        return static::$classManager->getClassInstancesForSchema( static::SCHEMA_CLASS );
+        return MediaWikiServices::getInstance()->get( 'JsonClassManager' )
+            ->getClassInstancesForSchema( static::SCHEMA_CLASS );
     }
 
 
@@ -102,7 +97,7 @@ class UserAchievements {
      * @param int $i
      * @return DBConnRef
      */
-    public static function getDB( $i = DB_MASTER ): DBConnRef {
+    public static function getDB( int $i = DB_PRIMARY ): DBConnRef {
         $lb = MediaWikiServices::getInstance()->getDBLoadBalancer();
         return $lb->getConnectionRef( $i );
     }
@@ -217,16 +212,6 @@ class UserAchievements {
         $altUserText = $wgUserAchievementsUseRealName && $user->getRealName() ? $user->getRealName() : false;
 
         return Linker::userLink( $user->getId(), $user->getName(), $altUserText );
-    }
-
-
-
-    /**
-     *
-     */
-    public static function initialize() {
-        static::$classManager = MediaWikiServices::getInstance()->get( 'JsonSchemaClassManager' );
-        static::$classManager->registerSchema(AchievementSchema::class );
     }
 
 

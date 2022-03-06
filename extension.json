@@ -12,10 +12,9 @@
   "requires": {
     "MediaWiki": ">= 1.35.0",
     "extensions": {
-      "JsonSchemaClasses": "*"
+      "JsonClasses": "*"
     }
   },
-  "callback": "MediaWiki\\Extension\\UserAchievements\\UserAchievements::initialize",
   "config_prefix": "wg",
   "config": {
     "UserAchievementsDefaultAchievedColor": {
@@ -43,9 +42,9 @@
     }
   },
   "Hooks": {
+    "JsonClassRegistration": "main",
     "LoadExtensionSchemaUpdates": "main",
-    "ParserFirstCallInit": "main",
-    "UserAchievementsRegisterAchievements": "main"
+    "ParserFirstCallInit": "main"
   },
   "HookHandlers": {
     "main": {
@@ -112,6 +111,5 @@
   "SpecialPages": {
     "UserAchievements": "MediaWiki\\Extension\\UserAchievements\\Special\\SpecialUserAchievements"
   },
-  "ServiceWiringFiles": [ "src/ServiceWiring.php" ],
   "manifest_version": 2
 }

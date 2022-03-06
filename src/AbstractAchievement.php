@@ -2,7 +2,7 @@
 
 namespace MediaWiki\Extension\UserAchievements;
 
-use MediaWiki\Extension\JsonSchemaClasses\AbstractJsonSchemaClass;
+use MediaWiki\Extension\JsonClasses\AbstractJsonClass;
 use MediaWiki\MediaWikiServices;
 use MWException;
 use MWTimestamp;
@@ -11,7 +11,7 @@ use RequestContext;
 use Title;
 use User;
 
-abstract class AbstractAchievement extends AbstractJsonSchemaClass {
+abstract class AbstractAchievement extends AbstractJsonClass {
     /**
      * @var string
      */
