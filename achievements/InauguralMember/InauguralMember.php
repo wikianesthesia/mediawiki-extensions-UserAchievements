@@ -21,7 +21,7 @@ class InauguralMember extends AbstractEditsAchievement {
 
     protected static $installationTimestamp = 0;
 
-    protected function doTryAchieve( User $user ) {
+    protected function doTryAchieve( User $user ): void {
         $membershipTime = $user->getRegistration();
 
         if( $membershipTime ) {

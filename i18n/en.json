@@ -14,6 +14,8 @@
   "userachievements-error-invaliduser": "Invalid user",
   "userachievements-error-permissiondenied": "Permission denied",
   "userachievements-error-usernotloggedin": "User not logged in",
+  "userachievements-log-badgeachieved": "User {user} achieved {badge}",
+  "userachievements-log-tryachieve": "Trying to achieve {achievement} for user {user}",
   "userachievements-special-achievementadministration-button": "Achievement administration",
   "userachievements-special-badgeinfo-userlist-heading": "List of users",
   "userachievements-special-badgeinfo-userlist-limitnotice": "The first $1 users to achieve this badge are shown. $2",

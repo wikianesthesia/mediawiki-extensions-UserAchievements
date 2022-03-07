@@ -241,6 +241,12 @@ abstract class AbstractAchievement extends AbstractJsonClass {
             return;
         }
 
+        UserAchievements::getLogger()->info(
+            wfMessage( 'userachievements-log-tryachieve')->plain(), [
+            'user' => $user->getName(),
+            'achievement' => $this->getName()
+        ] );
+
         $this->doTryAchieve( $user );
     }
 
@@ -274,6 +280,37 @@ abstract class AbstractAchievement extends AbstractJsonClass {
         }
 
         return false;
+    }
+
+    public function userMaxAchievedLevel( User $user ): int {
+        $maxAchievedLevel = 0;
+
+        if( !$user->isRegistered() ) {
+            return false;
+        }
+
+        $db = UserAchievements::getDB();
+
+        // TODO theoretically achieved_time could be 0?
+        $res = $db->select(
+            'userachievements_userbadges',
+            'level',
+            [
+                'user_id' => $user->getId(),
+                'achievement_id' => $this->getId(),
+            ],
+            __METHOD__,
+            [
+                'ORDER BY' => 'level DESC',
+                'LIMIT' => 1
+            ]
+        );
+
+        if( $row = $res->fetchRow() ) {
+            $maxAchievedLevel = $row[ 'level' ];
+        }
+
+        return $maxAchievedLevel;
     }
 
     /**
@@ -332,6 +369,16 @@ abstract class AbstractAchievement extends AbstractJsonClass {
             __METHOD__
         );
 
+        $success = $db->affectedRows() > 0;
+
+        if( $success ) {
+            UserAchievements::getLogger()->info(
+                wfMessage( 'userachievements-log-badgeachieved')->plain(), [
+                    'user' => $user->getName(),
+                    'badge' => $badge->getName()
+            ] );
+        }
+
         // TODO figure out validation.
         // affectedRows() sometimes returns 1 and sometimes returns 2 even though only one row is actually changed.
         return $db->affectedRows() > 0;
@@ -342,14 +389,11 @@ abstract class AbstractAchievement extends AbstractJsonClass {
      * Subclasses should override this function if they do not wish to use default user stats behavior.
      * @param User $user
      */
-    protected function doTryAchieve( User $user ) {
+    protected function doTryAchieve( User $user ): void {
         $userStats = $this->getUserStats( $user );
 
-        for( $level = 1; $level <= $this->getLevels(); $level++ ) {
-            if( $this->userHasAchieved( $user, $level ) ) {
-                continue;
-            }
-
+        // Start with the next level the user hasn't achieved
+        for( $level = $this->userMaxAchievedLevel( $user ) + 1; $level <= $this->getLevels(); $level++ ) {
             $badge = $this->getBadge( $level );
 
             if( !$badge ) {
@@ -383,6 +427,9 @@ abstract class AbstractAchievement extends AbstractJsonClass {
                 // Set the time to the latest time in the thresholds met time array (i.e. the time when all required
                 // stats were met).
                 $this->achieve( $user, $level, (string) max( $thresholdsMetTimes ) );
+            } else {
+                // If the user hasn't met the criteria to achieve this level, there is no reason to check higher levels.
+                break;
             }
         }
     }

@@ -20,7 +20,7 @@ class MembershipYears extends AbstractAchievement {
         return $installationTimestamp->diff( new MWTimestamp() )->y + 1;
     }
 
-    protected function doTryAchieve( User $user ) {
+    protected function doTryAchieve( User $user ): void {
         $registration = $user->getRegistration();
 
         if( !$registration ||
