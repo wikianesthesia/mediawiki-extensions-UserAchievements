@@ -242,7 +242,7 @@ abstract class AbstractAchievement extends AbstractJsonClass {
         }
 
         UserAchievements::getLogger()->info(
-            wfMessage( 'userachievements-log-tryachieve')->plain(), [
+            wfMessage( 'userachievements-log-tryachieve')->text(), [
             'user' => $user->getName(),
             'achievement' => $this->getName()
         ] );
@@ -373,7 +373,7 @@ abstract class AbstractAchievement extends AbstractJsonClass {
 
         if( $success ) {
             UserAchievements::getLogger()->info(
-                wfMessage( 'userachievements-log-badgeachieved')->plain(), [
+                wfMessage( 'userachievements-log-badgeachieved')->text(), [
                     'user' => $user->getName(),
                     'badge' => $badge->getName()
             ] );
