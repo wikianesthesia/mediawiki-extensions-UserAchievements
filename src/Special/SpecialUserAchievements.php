@@ -64,7 +64,7 @@ class SpecialUserAchievements extends SpecialPage {
         } else {
             if( UserAchievements::userIsUserAchievementsAdmin() ) {
                 if( $req->getText( 'action' ) === 'admin' ) {
-                    $this->showAchievementAdministration();
+                    $this->showAdministration();
 
                     return;
                 }
@@ -316,5 +316,9 @@ class SpecialUserAchievements extends SpecialPage {
 
             $out->addHTML( $templateParser->processTemplate( 'AchievementSeries', $achievementData ) );
         }
+    }
+
+    protected function getGroupName() {
+        return 'users';
     }
 }
