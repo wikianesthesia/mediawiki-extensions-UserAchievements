@@ -202,7 +202,10 @@ class Badge {
                     $name = $achievement->getName();
 
                     if( $achievement->getLevels() > 1 ) {
-                        $name .= ' ' . $this->getLevel();
+                        $name .= ' ' .
+                            wfMessage( strtolower( UserAchievements::getExtensionName() . '-badge-level' ) ) .
+                            ' ' .
+                            $this->getLevel();
                     }
                 }
             }
