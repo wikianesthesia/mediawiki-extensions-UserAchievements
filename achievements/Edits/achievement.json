@@ -10,15 +10,15 @@
   "badges": [
     {
       "requiredStats": {
+        "edits": 1
+      }
+    }, {
+      "requiredStats": {
         "edits": 10
       }
     }, {
       "requiredStats": {
-        "edits": 50
-      }
-    }, {
-      "requiredStats": {
-        "edits": 250
+        "edits": 100
       }
     }, {
       "requiredStats": {
