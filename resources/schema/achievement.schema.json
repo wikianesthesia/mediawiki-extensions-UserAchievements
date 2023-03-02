@@ -167,7 +167,7 @@
     },
     "MessagesDirs": {
       "type": "array",
-      "description": "Directory paths containing JSON internationalization data. Unlike the extension.json definition of this field, this should be a simple array of paths relative to the achievement's root.",
+      "description": "Directory paths containing JSON internationalization data. Unlike the extension.json definition of this field, this should be a simple array of paths relative to the achievement's root directory.",
       "items": {
         "type": "string"
       }
